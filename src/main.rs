@@ -1,5 +1,7 @@
 use std::io;
 use rand::prelude::*;
+use std::cmp::Ordering;
+use std::process::exit;
 
 fn main() {
     let max_guess = 10;
@@ -14,17 +16,15 @@ fn main() {
 
         let mut guess = String::new();
         io::stdin().read_line(&mut guess).expect("Please enter a number between 1 and 100.");
-        let number = guess.to_string().trim().parse::<i32>().unwrap();
+        let guessed_number = guess.to_string().trim().parse::<i32>().unwrap();
 
-        if number == answer {
-            println!("\nYou got it! {} was the answer!", number);
-            break;
-        }
-
-        if number < answer {
-            println!("\nAlmost! The answer is higher than {}. Guess again!", number);
-        } else {
-            println!("\nClose! The answer is lower than {}. Guess again!", number);
+        match guessed_number.cmp(&answer) {
+            Ordering::Less => println!("\nAlmost! The answer is higher than {}. Guess again!", guessed_number),
+            Ordering::Greater => println!("\nClose! The answer is lower than {}. Guess again!", guessed_number),
+            Ordering::Equal => {
+                println!("\nYou got it! {} was the answer!", guessed_number);
+                exit(0);
+            }
         }
         
         current_guess = current_guess + 1;        
