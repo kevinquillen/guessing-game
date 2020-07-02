@@ -4,14 +4,13 @@ use std::cmp::Ordering;
 
 fn main() {
     let max_guess = 10;
-    let mut game_over = false;
     let mut current_guess = 0;
     let answer = rand::thread_rng().gen_range(1, 100);
 
     println!("\nWelcome to the guessing game!");
     println!("\nPlease enter a number between 1 and 100.");
 
-    while current_guess < max_guess && !game_over {
+    loop {
         println!("\nGuess #{}. You have {} guesses remaining.", current_guess + 1, (max_guess - current_guess));
 
         let mut guess = String::new();
@@ -26,7 +25,7 @@ fn main() {
                     Ordering::Greater => println!("\nClose! The answer is lower than {}!", guessed_number),
                     Ordering::Equal => {
                         println!("\nYou got it! {} was the answer!", guessed_number);
-                        game_over = true;
+                        break;
                     }
                 }
             },
@@ -36,10 +35,11 @@ fn main() {
             }
         }
 
-        current_guess = current_guess + 1;        
-    }
-
-    if !game_over {
-        println!("\nWhoops! You ran out of guesses. The answer was {}!", answer);
+        current_guess = current_guess + 1;   
+        
+        if current_guess == max_guess {
+            println!("\nWhoops! You ran out of guesses. The answer was {}!", answer);
+            break;
+        }
     }
 }
